@@ -1,0 +1,43 @@
+---
+# tasks file for install-socat
+
+- block:
+  - name: Check socat exists
+    shell: command -v socat
+    failed_when: false
+    changed_when: false
+    register: command_socat
+  - block:
+    - name: Create download directory
+      file:
+        dest: "{{ tmp_dir }}/socat"
+        state: directory
+
+    - name: Retrieve and unpack
+      unarchive:
+        src: "{{ archive_location }}"
+        remote_src: yes
+        dest: "{{ tmp_dir }}/socat"
+        extra_opts: [--strip-components=1]
+      register: retrieve_and_unpack
+
+    - name: Configure
+      shell: "cd {{ tmp_dir }}/socat && ./configure"
+
+    - name: Make
+      shell: "cd {{ tmp_dir }}/socat && make"
+
+    - name: Move to install directory
+      copy:
+        src: "{{ tmp_dir }}/socat/socat"
+        dest: "{{ install_dir }}"
+
+    - file:
+        path: "{{ install_dir }}/socat"
+        state: file
+        mode: u=rwx,g=r-x,o=r-x
+    when: command_socat.rc != 0
+  when: ansible_os_family == "Darwin"
+
+
+

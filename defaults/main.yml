@@ -1,0 +1,6 @@
+---
+# defaults file for install-socat
+
+archive_location: http://www.dest-unreach.org/socat/download/socat-1.7.3.2.tar.gz
+tmp_dir: /tmp
+install_dir: /usr/local/bin/
