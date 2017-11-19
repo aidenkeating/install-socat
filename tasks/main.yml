@@ -13,13 +13,15 @@
         dest: "{{ tmp_dir }}/socat"
         state: directory
 
-    - name: Retrieve and unpack
-      unarchive:
-        src: "{{ archive_location }}"
-        remote_src: yes
-        dest: "{{ tmp_dir }}/socat"
-        extra_opts: [--strip-components=1]
-      register: retrieve_and_unpack
+    - name: Retrieve socat tarball
+      get_url:
+        url: "{{ archive_location }}"
+        dest: "{{ tmp_dir }}/"
+      register: retrieve_socat_tarball
+
+    - name: Unarchive socat tarball
+      shell: "bsdtar -xf {{ retrieve_socat_tarball.dest }} -C {{ tmp_dir }}/socat --strip-components=1"
+      register: unarchive_socat_tarball
 
     - name: Configure
       shell: "cd {{ tmp_dir }}/socat && ./configure"
