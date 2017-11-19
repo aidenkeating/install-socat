@@ -1,4 +1,4 @@
-Install socat
+Install socat on macOS
 =========
 
 Install `socat` without using package managers like `brew`.
@@ -7,7 +7,7 @@ Requirements
 ------------
 
 * `curl`
-* `tar`
+* `bsdtar`
 
 Role Variables
 --------------
